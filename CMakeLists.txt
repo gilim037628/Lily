@@ -55,15 +55,11 @@ target_link_libraries(imgui PUBLIC
 
 add_executable(Lily
     src/main.cpp
+    src/Engine/UpdateManager.cpp
 
     # UI
     src/UI/MainWindow.cpp
-    src/UI/AgentSidebar.cpp
-    src/UI/SettingsSidebar.cpp
-    src/UI/ChatView.cpp
-    src/UI/HeaderBar.cpp
-    src/UI/StatusBar.cpp
-    src/UI/ViewPanel.cpp
+    src/UI/Panels.cpp
 
     # LLM
     src/LLM/LocalProvider.cpp
@@ -79,12 +75,18 @@ add_executable(Lily
 
     # Memory
     src/Memory/MemoryManager.cpp
+    src/Memory/MemoryCategory.h
 
     # Runtime
     src/Runtime/RuntimeManager.cpp
-    src/Memory/MemoryAnalyzer.h
-    src/Memory/MemoryAnalyzer.cpp
-    src/Memory/MemoryCategory.cpp
+    src/Memory/WorkingMemory.cpp
+
+    src/Cognition/StateAnalyzer.cpp
+
+    # Vision
+    src/Vision/VisionManager.h
+    src/Vision/VisionManager.cpp
+    src/Vision/Grids.cpp
 )
 
 target_include_directories(Lily PRIVATE

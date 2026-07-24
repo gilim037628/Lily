@@ -14,7 +14,3 @@ enum class MemoryCategory
     Personal,
     General
 };
-
-const char* ToString(
-    MemoryCategory category
-);

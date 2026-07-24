@@ -1,13 +1,9 @@
 #pragma once
 
-#include "HeaderBar.h"
-#include "ViewPanel.h"
-#include "StatusBar.h"
-
-#include "AgentSidebar.h"
-#include "SettingsSidebar.h"
+#include "Panels.h"
 #include "../Runtime/RuntimeManager.h"
 #include "../Memory/MemoryManager.h"
+#include "../Vision/VisionManager.h"
 
 class MainWindow
 {
@@ -15,10 +11,19 @@ public:
 
     MainWindow();
 
+    void SetVisionManager(
+        VisionManager* manager
+    );
+
     void Render();
 
     RuntimeManager&
     GetRuntime();
+
+    bool Initialize();
+    void Update();
+
+    GridBuilder& GetGridBuilder();
 
 private:
 
@@ -37,4 +42,10 @@ private:
 
     float leftWidth = 0.0f;
     float rightWidth = 0.0f;
+
+    VisionManager* vision = nullptr;
+
+    GridRenderer gridRenderer;
+
+    GridBuilder girdBuilder;
 };

@@ -1,6 +1,252 @@
-#include "SettingsSidebar.h"
+#include "Panels.h"
 
 #include <imgui.h>
+
+#include "../Runtime/RuntimeManager.h"
+
+AgentSidebar::AgentSidebar()
+{
+    agents.push_back(
+    {
+        "Lily",
+        AIState::Running
+    });
+
+    agents.push_back(
+    {
+        "Minecraft Dev",
+        AIState::Running
+    });
+
+    agents.push_back(
+    {
+        "Research AI",
+        AIState::Background
+    });
+
+    agents.push_back(
+    {
+        "Artist",
+        AIState::Stopped
+    });
+}
+
+void AgentSidebar::Render()
+{
+    ImGui::Text("AI Manager");
+
+    ImGui::Separator();
+
+    //--------------------------------
+    // Running
+    //--------------------------------
+
+    ImGui::Text("Running");
+
+    for(size_t i = 0; i < agents.size(); i++)
+    {
+        if(agents[i].state != AIState::Running)
+        {
+            continue;
+        }
+
+        ImGui::PushID((int)i);
+
+        bool selected =
+            selectedAI == (int)i;
+
+        std::string id =
+            agents[i].name + "##" + std::to_string(i);
+
+        if(
+            ImGui::Selectable(
+                id.c_str(),
+                selected
+            )
+        )
+        {
+            selectedAI = (int)i;
+        }
+
+        if(
+            ImGui::BeginPopupContextItem()
+        )
+        {
+            if(
+                ImGui::MenuItem(
+                    "Move To Background"
+                )
+            )
+            {
+                agents[i].state =
+                    AIState::Background;
+            }
+
+            if(
+                ImGui::MenuItem(
+                    "Stop"
+                )
+            )
+            {
+                agents[i].state =
+                    AIState::Stopped;
+            }
+
+            ImGui::EndPopup();
+        }
+
+        ImGui::PopID();
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+
+    //--------------------------------
+    // Background
+    //--------------------------------
+
+    ImGui::Text("Background");
+
+    for(size_t i = 0; i < agents.size(); i++)
+    {
+        if(agents[i].state != AIState::Background)
+        {
+            continue;
+        }
+
+        ImGui::PushID((int)i);
+
+        bool selected =
+            selectedAI == (int)i;
+
+        std::string id =
+            agents[i].name + "##" + std::to_string(i);
+
+        if(
+            ImGui::Selectable(
+                id.c_str(),
+                selected
+            )
+        )
+        {
+            selectedAI = (int)i;
+        }
+
+        if(
+            ImGui::BeginPopupContextItem()
+        )
+        {
+            if(
+                ImGui::MenuItem(
+                    "Move To Running"
+                )
+            )
+            {
+                agents[i].state =
+                    AIState::Running;
+            }
+
+            if(
+                ImGui::MenuItem(
+                    "Stop"
+                )
+            )
+            {
+                agents[i].state =
+                    AIState::Stopped;
+            }
+
+            ImGui::EndPopup();
+        }
+
+        ImGui::PopID();
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+
+    //--------------------------------
+    // Stopped
+    //--------------------------------
+
+    ImGui::Text("Stopped");
+
+    for(size_t i = 0; i < agents.size(); i++)
+    {
+        if(agents[i].state != AIState::Stopped)
+        {
+            continue;
+        }
+
+        ImGui::PushID((int)i);
+
+        bool selected =
+            selectedAI == (int)i;
+
+        std::string id =
+            agents[i].name + "##" + std::to_string(i);
+
+        if(
+            ImGui::Selectable(
+                id.c_str(),
+                selected
+            )
+        )
+        {
+            selectedAI = (int)i;
+        }
+
+        if(
+            ImGui::BeginPopupContextItem()
+        )
+        {
+            if(
+                ImGui::MenuItem(
+                    "Move To Running"
+                )
+            )
+            {
+                agents[i].state =
+                    AIState::Running;
+            }
+
+            if(
+                ImGui::MenuItem(
+                    "Move To Background"
+                )
+            )
+            {
+                agents[i].state =
+                    AIState::Background;
+            }
+
+            ImGui::EndPopup();
+        }
+
+        ImGui::PopID();
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+
+    //--------------------------------
+    // Create AI
+    //--------------------------------
+
+    if(
+        ImGui::Button(
+            "+ Create AI",
+            ImVec2(-1, 40)
+        )
+    )
+    {
+        agents.push_back(
+        {
+            "New AI",
+            AIState::Stopped
+        });
+    }
+}
 
 void SettingsSidebar::Render(
     MemoryManager& memory
@@ -349,4 +595,75 @@ void SettingsSidebar::Render(
     }
 
     ImGui::EndChild();
+}
+
+void HeaderBar::Render()
+{
+    ImGui::Text("Lily");
+
+    ImGui::SameLine();
+
+    ImGui::TextColored(
+        ImVec4(
+            0.2f,
+            1.0f,
+            0.2f,
+            1.0f
+        ),
+        "Running"
+    );
+
+    ImGui::Separator();
+}
+
+void StatusBar::Render()
+{
+    ImGui::Separator();
+
+    ImGui::Text(
+        "CPU 3% | RAM 2.1GB | Voice ON | Live2D OFF"
+    );
+}
+
+void ViewPanel::Render(
+    RuntimeManager& runtime
+)
+{
+    ImGui::Text(
+        "Lily AI Test"
+    );
+
+    ImGui::Separator();
+
+    ImGui::InputTextMultiline(
+        "##Prompt",
+        promptBuffer,
+        sizeof(promptBuffer),
+        ImVec2(-1, 120)
+    );
+
+    if(
+        ImGui::Button(
+            "Send"
+        )
+    )
+    {
+        response =
+            runtime.Generate(
+                promptBuffer
+            );
+    }
+
+    ImGui::Spacing();
+
+    ImGui::Text(
+        "Response"
+    );
+
+    ImGui::Separator();
+
+    ImGui::TextWrapped(
+        "%s",
+        response.c_str()
+    );
 }

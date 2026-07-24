@@ -1,9 +1,24 @@
 #pragma once
 
-#include "MemoryEntry.h"
-
+#include <cstdint>
 #include <vector>
 #include <string>
+
+#include "MemoryCategory.h"
+
+struct MemoryEntry
+{
+    std::string id;
+
+    MemoryCategory category =
+        MemoryCategory::General;
+
+    std::string content;
+
+    float importance = 1.0f;
+
+    uint64_t timestamp = 0;
+};
 
 class MemoryManager
 {
@@ -56,4 +71,25 @@ private:
 
     std::vector<MemoryEntry>
         longMemory;
+};
+
+const char* ToString(
+    MemoryCategory category
+);
+
+class MemoryAnalyzer
+{
+public:
+
+    bool ShouldSave(
+        const std::string& text
+    ) const;
+
+    MemoryEntry CreateMemory(
+        const std::string& text
+    ) const;
+
+private:
+
+    std::string GenerateId() const;
 };

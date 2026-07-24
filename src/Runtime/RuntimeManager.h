@@ -3,7 +3,6 @@
 #include <string>
 
 #include "../Memory/MemoryManager.h"
-#include "../Memory/MemoryAnalyzer.h"
 #include "../LLM/QwenProvider.h"
 #include "../Cognition/LilyState.h"
 #include "../Cognition/WorkingMemory.h"

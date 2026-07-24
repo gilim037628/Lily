@@ -208,4 +208,18 @@ void MainWindow::Render()
         );
         ImGui::End();
     }
+    if (vision)
+    {
+        gridRenderer.Render(
+            vision->GetGridBuilder(),
+            3
+        );
+    }
+}
+
+void MainWindow::SetVisionManager(
+    VisionManager* manager
+)
+{
+    vision = manager;
 }
